@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const urlencodedParser = bodyParser.urlencoded({ extended: false});
 const PDFDocument = require('pdfkit')
 const fs = require('fs')
+const path = require('path') 
 
 var nodemailer = require('nodemailer');
 var transporter = nodemailer.createTransport({
@@ -87,4 +88,16 @@ app.get('/download-cv', (req, res) => {
     pdfDoc.end();
 });
 
+
+// use this directory to serve static html files so the backend can run on the server
+app.use(express.static(path.join(__dirname, "client", "build")))
+
+// create endpoint on the backend server
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"))
+})
+
 app.listen(port)
+
+
+
